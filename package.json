@@ -15,9 +15,12 @@
     "@fortawesome/free-solid-svg-icons": "^6.5.1",
     "@fortawesome/vue-fontawesome": "^3.0.5",
     "@supabase/supabase-js": "^2.39.3",
+    "@vee-validate/yup": "^4.12.5",
+    "@vee-validate/zod": "^4.12.5",
     "flowbite": "^2.2.1",
     "material-icons": "^1.13.12",
     "primevue": "^3.47.1",
+    "vee-validate": "^4.12.5",
     "vue": "^3.3.11",
     "vue-router": "^4.2.5"
   },
