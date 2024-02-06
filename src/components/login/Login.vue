@@ -18,10 +18,15 @@
             <InputText
               id="username"
               v-model="username"
-              :class="{ 'p-invalid': errors.username }"
-              :bind = "usernameAttrs"
+              :class="{ 'border-rose-500': errors.username }"
+              :bind="usernameAttrs"
             />
-            <small id="username-help" class="mb-2" :class="{ 'text-red-500': errors.username }">{{ errors.username }}</small>
+            <small
+              id="username-help"
+              class="mb-2"
+              :class="{ 'text-red-500': errors.username }"
+              >{{ errors.username }}</small
+            >
           </div>
           <div class="flex flex-col gap-2">
             <label for="password">Password</label>
@@ -30,10 +35,15 @@
               v-model="password"
               toggleMask
               :feedback="false"
-              :bind = "passwordAttrs"
+              :bind="passwordAttrs"
               :class="{ 'p-invalid': errors.password }"
             />
-            <small id="password-help" class="mb-2" :class="{ 'text-red-500': errors.password }">{{ errors.password }}</small>
+            <small
+              id="password-help"
+              class="mb-2"
+              :class="{ 'text-red-500': errors.password }"
+              >{{ errors.password }}</small
+            >
           </div>
           <div class="flex flex-row mt-3 justify-between mb-2">
             <div class="flex flex-row gap-2">
@@ -90,32 +100,52 @@
         </div>
       </div>
     </section>
+    <h1>Counter: {{ count }}</h1>
+    <Button @click="increment">+</Button>
+    <Button @click="decrement">-</Button>
   </form>
 </template>
 
   
 <script setup>
-import { useForm } from 'vee-validate';
+import { useForm } from "vee-validate";
 import * as yup from "yup";
-const { defineField, errors, handleSubmit} = useForm({
+import { useStore } from 'vuex'
+import { computed } from 'vue'
+const store = useStore();
+const { defineField, errors, handleSubmit } = useForm({
   validationSchema: yup.object({
     username: yup.string().required(),
     password: yup.string().min(6).required(),
+    remember_me: yup.boolean(),
   }),
 });
-const test = useForm({
-  validationSchema: yup.object({
-    username: yup.string().required(),
-    password: yup.string().min(6).required(),
-  }),
-});
+
 const [username, usernameAttrs] = defineField("username");
 const [password, passwordAttrs] = defineField("password");
-
-const login = handleSubmit((values,form) => {
-  console.log("test",form);
+const [remember_me] = defineField("remember_me");
+const increment = () => {
+   store.commit('increment');
+   console.log('store',store)
+}
+const decrement = () => {
+   store.commit('decrement');
+   console.log('store',store)
+}
+const count = computed(() => store.state.count);
+// const count = computed(() => this.$store.state.count);
+const login = handleSubmit(async (values, form) => {
   console.log("form", values);
-  console.log("error", errors);
+  console.log("store", this.$store);
+  this.$store.dispatch("login", {
+    email: values.username,
+    password: values.password,
+  });
+  store.dispatch({
+    type: "incrementAsync",
+    amount: 10,
+  });
+  console.log("error", error.message);
 });
 </script>
   
