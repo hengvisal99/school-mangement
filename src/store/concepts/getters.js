@@ -1,8 +1,14 @@
-// Define your getters here
 export const getters = {
-    // Example getter
-    doubleCount(state) {
-      return state.count * 2;
-    }
-  };
-  
+
+  getUser(state) {
+    return state.user;
+  },
+  getToken(state) {
+    return state.user;
+  },
+  getLoginError(state){
+    return state.loginError
+  },
+  getLoading: state => state.isLoading,
+  getCount: state => state.count,
+};

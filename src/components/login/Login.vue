@@ -12,14 +12,15 @@
           <h1 class="text-center text-2xl p-5 font-bold">
             School Management System
           </h1>
-
+          <Message severity="error" :sticky="false"  v-if="loginError != null"
+            >Invalid Username or Password</Message
+          >
           <div class="flex flex-col gap-2">
             <label for="username">Username</label>
             <InputText
               id="username"
               v-model="username"
               :class="{ 'border-rose-500': errors.username }"
-              :bind="usernameAttrs"
             />
             <small
               id="username-help"
@@ -35,7 +36,6 @@
               v-model="password"
               toggleMask
               :feedback="false"
-              :bind="passwordAttrs"
               :class="{ 'p-invalid': errors.password }"
             />
             <small
@@ -66,7 +66,7 @@
             <Button
               type="submit"
               class="w-full mt-4"
-              label="Login"
+              :label="isLoading ? 'Logging in...' : 'Login'"
               severity="info"
               raised
             />
@@ -100,9 +100,6 @@
         </div>
       </div>
     </section>
-    <h1>Counter: {{ count }}</h1>
-    <Button @click="increment">+</Button>
-    <Button @click="decrement">-</Button>
   </form>
 </template>
 
@@ -110,9 +107,10 @@
 <script setup>
 import { useForm } from "vee-validate";
 import * as yup from "yup";
-import { useStore } from 'vuex'
-import { computed } from 'vue'
+import { useStore } from "vuex";
+import { computed } from "vue";
 const store = useStore();
+
 const { defineField, errors, handleSubmit } = useForm({
   validationSchema: yup.object({
     username: yup.string().required(),
@@ -120,32 +118,17 @@ const { defineField, errors, handleSubmit } = useForm({
     remember_me: yup.boolean(),
   }),
 });
-
-const [username, usernameAttrs] = defineField("username");
-const [password, passwordAttrs] = defineField("password");
+const [username] = defineField("username");
+const [password] = defineField("password");
 const [remember_me] = defineField("remember_me");
-const increment = () => {
-   store.commit('increment');
-   console.log('store',store)
-}
-const decrement = () => {
-   store.commit('decrement');
-   console.log('store',store)
-}
-const count = computed(() => store.state.count);
-// const count = computed(() => this.$store.state.count);
-const login = handleSubmit(async (values, form) => {
-  console.log("form", values);
-  console.log("store", this.$store);
-  this.$store.dispatch("login", {
+
+const isLoading = computed(() => store.state.getLoading);
+const loginError = computed(() => store.getters.getLoginError);
+const login = handleSubmit(async (values) => {
+  store.dispatch("login", {
     email: values.username,
     password: values.password,
   });
-  store.dispatch({
-    type: "incrementAsync",
-    amount: 10,
-  });
-  console.log("error", error.message);
 });
 </script>
   
