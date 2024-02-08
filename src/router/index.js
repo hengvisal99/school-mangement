@@ -5,34 +5,37 @@ import TeacherComponent from '../components/right-content/Teacher.vue';
 import CourseComponent from '../components/right-content/Courses.vue';
 import LoginComponent from '../components/login/Login.vue';
 import { supabase } from '../supabase/supabase';
+import store from "../store/store";
 const routes = [
   {
     path: '/',
     component: () => import('../components/Main-compoent.vue'),
     meta: {
-      auth: false
+      requireAuth: true
     },
 
     children: [
       {
         path: 'school',
         component: SchoolComponent,
+        name: 'school',
         meta: {
-          auth: true
+          requireAuth: true
         },
       },
       {
         path: 'teacher',
         component: TeacherComponent,
         meta: {
-          auth: false
+          requireAuth: true
         },
       },
       {
         path: 'course',
+        name: 'course',
         component: CourseComponent,
         meta: {
-          auth: false
+          requireAuth: true
         },
       },
     ],
@@ -43,39 +46,22 @@ const routes = [
     component: LoginComponent,
   },
 ];
+
 const router = createRouter({
   history: createWebHistory(),
   routes
 })
 router.beforeEach((to, from, next) => {
-  console.log(to.meta.auth)
-  if (to.meta.auth) {
-    next();
+  console.log('form',from)
+  console.log('to',to)
+  console.log('redirectedFrom',to?.redirectedFrom?.fullPath)
+  store.commit("setRedirectedFrom", to?.redirectedFrom?.fullPath);
+  if (to.meta.requireAuth && !store.getters.isAuth) {
+    next({ name: 'login' });
   } else {
-    // Check if the current route is already the login page
-    if (to.name === 'login') {
-      next(); // Prevent infinite loop
-    } else {
-      next({ name: 'login' }); // Redirect to login for other routes without authentication
-    }
+    next();
   }
 });
-// router.beforeEach((to, from, next) => {
-//   // const store = useStore()
-//   console.log('test',to.matched.some(record => record.meta.auth))
-//   next()
-//   // if (to.matched.some(record => record.meta.requiresAuth)) {
-//   //   if (!store.getters.isAuthenticated) {
-//   //     next({
-//   //       path: '/login',
-//   //       query: { redirect: to.fullPath }
-//   //     })
-//   //   } else {
-//   //     next()
-//   //   }
-//   // } else {
-//   //   next()
-//   // }
-// })
+
 
 export default router

@@ -12,7 +12,7 @@
           <h1 class="text-center text-2xl p-5 font-bold">
             School Management System
           </h1>
-          <Message severity="error" :sticky="false"  v-if="loginError != null"
+          <Message icon="null" severity="error" :closable="false"  v-if="loginError != null"
             >Invalid Username or Password</Message
           >
           <div class="flex flex-col gap-2">
@@ -109,8 +109,9 @@ import { useForm } from "vee-validate";
 import * as yup from "yup";
 import { useStore } from "vuex";
 import { computed } from "vue";
+import { useRouter } from 'vue-router';
 const store = useStore();
-
+const router = useRouter();
 const { defineField, errors, handleSubmit } = useForm({
   validationSchema: yup.object({
     username: yup.string().required(),
@@ -122,7 +123,7 @@ const [username] = defineField("username");
 const [password] = defineField("password");
 const [remember_me] = defineField("remember_me");
 
-const isLoading = computed(() => store.state.getLoading);
+const isLoading = computed(() => store.getters.getLoading);
 const loginError = computed(() => store.getters.getLoginError);
 const login = handleSubmit(async (values) => {
   store.dispatch("login", {
@@ -130,6 +131,7 @@ const login = handleSubmit(async (values) => {
     password: values.password,
   });
 });
+
 </script>
   
 <style scoped>
