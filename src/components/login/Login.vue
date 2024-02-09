@@ -111,7 +111,6 @@ import { useStore } from "vuex";
 import { computed } from "vue";
 import { useRouter } from 'vue-router';
 const store = useStore();
-const router = useRouter();
 const { defineField, errors, handleSubmit } = useForm({
   validationSchema: yup.object({
     username: yup.string().required(),

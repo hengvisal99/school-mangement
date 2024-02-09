@@ -78,13 +78,14 @@
                   </div>
                   <ul class="py-1" role="none">
                     <li v-for="(item, index) in navItems" :key="index">
-                      <router-link
+                      <span
+                        @click="onClickTopBar(item)"
                         :to="item.link"
                         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
                         role="menuitem"
                       >
                         {{ item.label }}
-                      </router-link>
+                      </span>
                     </li>
                   </ul>
                 </div>
@@ -156,59 +157,64 @@
 
 </template>
 
-<script>
-export default {
-  data() {
-    return {
-      navItems: [
-        { label: "Dashboard", link: "#" },
-        { label: "Settings", link: "#" },
-        { label: "Earnings", link: "#" },
-        { label: "Sign out", link: "#" },
-      ],
-      menuItems: [
-        // {
-        //   label: "E-commerce",
-        //   icon: ["fa-solid", "fa-user-secret"],
-        //   submenu: [
-        //     { label: "Products", link: "#" },
-        //     { label: "Billing", link: "#" },
-        //     { label: "Invoice", link: "#" },
-        //   ],
-        // },
-        {
-          label: "Dashboard",
-          icon: ["fa-solid", "fa-list"],
-          link: "dashboard",
-        },
-        {
-          label: "School",
-          icon: ["fa-solid", "fa-school"],
-          link: "school",
-        },
-        {
-          label: "Teacher",
-          icon: ["fa-solid", "fa-person-chalkboard"],
-          link: "teacher",
-        },
-        {
-          label: "Course",
-          icon: ["fa-solid", "fa-graduation-cap"],
-          link: "course",
-        },
-        {
-          label: "Exam",
-          icon: ["fa-solid", "fa-calendar-minus"],
-          link: "exam",
-        },
-      ],
-    };
+<script setup>
+import { initFlowbite } from 'flowbite'
+import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+import { supabase } from '../supabase/supabase';
+const navItems = ref([
+  // { label: "Dashboard", link: "#" },
+  // { label: "Settings", link: "#" },
+  // { label: "Earnings", link: "#" },
+  { label: "Sign out" ,code: 'SO'},
+]);
+
+const menuItems = ref([
+  {
+    label: "Dashboard",
+    icon: ["fa-solid", "fa-list"],
+    link: "dashboard",
   },
-  methods: {},
-  mounted() {
-    console.log("h");
+  {
+    label: "School",
+    icon: ["fa-solid", "fa-school"],
+    link: "school",
   },
+  {
+    label: "Teacher",
+    icon: ["fa-solid", "fa-person-chalkboard"],
+    link: "teacher",
+  },
+  {
+    label: "Course",
+    icon: ["fa-solid", "fa-graduation-cap"],
+    link: "course",
+  },
+  {
+    label: "Exam",
+    icon: ["fa-solid", "fa-calendar-minus"],
+    link: "exam",
+  },
+]);
+
+const router = useRouter();
+
+const onClickTopBar = async (item) => {
+
+  if(item.code == 'SO' ){
+    console.log(`Clicked on item: ${item.code}`);
+    const { error } = await supabase.auth.signOut()
+    if(error == null){
+      console.log(`error`,error);
+      router.push('login')
+    }
+    
+  }
 };
+
+onMounted(() => {
+  initFlowbite();
+});
 </script>
 
 <style lang="css" scoped>

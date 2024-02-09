@@ -16,6 +16,10 @@ const routes = [
 
     children: [
       {
+        path: '', // This is the default route
+        redirect: 'school' // Redirect to the 'school' route
+      },
+      {
         path: 'school',
         component: SchoolComponent,
         name: 'school',
@@ -51,16 +55,21 @@ const router = createRouter({
   history: createWebHistory(),
   routes
 })
-router.beforeEach((to, from, next) => {
-  console.log('form',from)
-  console.log('to',to)
-  console.log('redirectedFrom',to?.redirectedFrom?.fullPath)
-  store.commit("setRedirectedFrom", to?.redirectedFrom?.fullPath);
-  if (to.meta.requireAuth && !store.getters.isAuth) {
+
+router.beforeEach(async (to, from, next) => {
+  // console.log('Before each guard triggered');
+  // console.log('From:', from);
+  // console.log('To:', to);
+  const redirectedRoute = to?.redirectedFrom?.fullPath || from.fullPath 
+  const { data : {session} } = await supabase.auth.getSession();
+  const isAuthenticated = !!session;
+  store.commit("setRedirectedFrom", redirectedRoute);
+  if (to.meta.requireAuth && !isAuthenticated) {
     next({ name: 'login' });
   } else {
     next();
   }
+  
 });
 
 
