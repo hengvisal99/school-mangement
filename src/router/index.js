@@ -1,76 +1,82 @@
 
 import { createRouter, createWebHistory } from 'vue-router'
-import SchoolComponent from '../components/right-content/School.vue';
-import TeacherComponent from '../components/right-content/Teacher.vue';
-import CourseComponent from '../components/right-content/Courses.vue';
-import LoginComponent from '../components/login/Login.vue';
 import { supabase } from '../supabase/supabase';
 import store from "../store/store";
 const routes = [
   {
     path: '/',
     component: () => import('../components/Main-compoent.vue'),
-    meta: {
-      requireAuth: true
-    },
-
     children: [
       {
-        path: '', // This is the default route
+        path: '', // Default route
         redirect: 'school' // Redirect to the 'school' route
       },
       {
+        path: '/:pathMatch(.*)*', // Catch-all route for handling not found routes
+        name: 'NotFound',
+        component: () => import('../components/content/PageNotFound.vue'),
+      },
+      {
         path: 'school',
-        component: SchoolComponent,
         name: 'school',
         meta: {
           requireAuth: true
         },
+        component: () => import('../components/content/School.vue'),
       },
+      // Other routes...
       {
-        path: 'teacher',
-        component: TeacherComponent,
+        path: 'department',
         meta: {
           requireAuth: true
         },
-      },
-      {
-        path: 'course',
-        name: 'course',
-        component: CourseComponent,
-        meta: {
-          requireAuth: true
-        },
+        component: () => import('../components/content/department/DepartmentList.vue'), // Add a layout component for department routes
+        children: [
+          {
+            path: '', // Default route for department layout
+            redirect: 'list' // Redirect to the department list
+          },
+          {
+            path: 'list', // Child route for the department list
+            component: () => import('../components/content/department/DepartmentList.vue'),
+            name: 'department-list',
+          },
+          {
+            path: 'add', // Child route for the department list
+            component: () => import('../components/content/department/DepartmentAdd.vue'),
+            name: 'department-add',
+          },
+          // Add other child routes as needed (e.g., 'add' route)
+        ]
       },
     ],
   },
-  {
-    path: '/login',
-    name: 'login',
-    component: LoginComponent,
-  },
+  // Other top-level routes...
 ];
+
 
 const router = createRouter({
   history: createWebHistory(),
-  routes
+  routes,
+  linkActiveClass: 'active'
 })
+console.log('router',router)
+// router.beforeEach(async (to, from, next) => {
+//   // console.log('Before each guard triggered');
+//   // console.log('From:', from);
+//   // console.log('To:', to);
+//   const redirectedRoute = to?.redirectedFrom?.fullPath || from.fullPath
+//   const { data: { session } } = await supabase.auth.getSession();
+//   const isAuthenticated = !!session;
+//   store.commit("setRedirectedFrom", redirectedRoute);
+//   console.log('isAuthenticated', isAuthenticated)
+//   if (to.meta.requireAuth && !isAuthenticated) {
+//     next({ name: 'login' });
+//   } else {
+//     next();
+//   }
 
-router.beforeEach(async (to, from, next) => {
-  // console.log('Before each guard triggered');
-  // console.log('From:', from);
-  // console.log('To:', to);
-  const redirectedRoute = to?.redirectedFrom?.fullPath || from.fullPath 
-  const { data : {session} } = await supabase.auth.getSession();
-  const isAuthenticated = !!session;
-  store.commit("setRedirectedFrom", redirectedRoute);
-  if (to.meta.requireAuth && !isAuthenticated) {
-    next({ name: 'login' });
-  } else {
-    next();
-  }
-  
-});
+// });
 
 
 export default router

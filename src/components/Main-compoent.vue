@@ -1,5 +1,5 @@
 <template>
-   <div>
+  <div>
     <div>
       <nav
         class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700"
@@ -102,71 +102,89 @@
       >
         <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
           <ul class="space-y-2 font-medium">
-            <li v-for="(item, index) in menuItems" :key="index">
-              <button
-                v-if="item.submenu"
-                type="button"
-                class="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                aria-controls="dropdown-example"
-                :data-collapse-toggle="'dropdown-' + index"
-              >
-                <font-awesome-icon :icon="item.icon" />
-                <span
-                  class="flex-1 ms-3 text-left rtl:text-right whitespace-nowrap"
-                  >{{ item.label }}</span
+            <template v-for="(item, index) in menuItems" :key="index">
+              <li v-if="item.submenu">
+                <button
+                  type="button"
+                  class="flex items-center w-full p-2 text-base text-gray-600 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                  :aria-controls="'dropdown-' + index"
+                  :data-collapse-toggle="'dropdown-' + index"
                 >
-                <font-awesome-icon icon="fa-solid fa-caret-down" />
-              </button>
-              <ul
-                v-if="item.submenu"
-                :id="'dropdown-' + index"
-                class="hidden py-2 space-y-2"
-              >
-                <li v-for="(subItem, subIndex) in item.submenu" :key="subIndex">
-                  <a
-                    :href="subItem.link"
-                    class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                  <font-awesome-icon class="icon" :icon="item.icon" />
+                  <span
+                    class="pl-3 flex-1 ms-3 text-left rtl:text-right whitespace-nowrap"
+                    >{{ item.label }}</span
                   >
-                    {{ subItem.label }}
-                  </a>
-                </li>
-              </ul>
-              <router-link
-                v-if="item.link"
-                :to="item.link"
-                class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-              >
-                <font-awesome-icon class="icon" :icon="item.icon" />
-
-                <span class="pl-3 flex-1 ms-3 whitespace-nowrap">{{
-                  item.label
-                }}</span>
-              </router-link>
-            </li>
+                  <svg
+                    class="w-3 h-3"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 10 6"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="m1 1 4 4 4-4"
+                    />
+                  </svg>
+                </button>
+                <ul :id="'dropdown-' + index" class="hidden py-2 space-y-2">
+                  <li
+                    v-for="(subItem, subIndex) in item.submenu"
+                    :key="subIndex"
+                  >
+                    <!-- <a
+                      :href="subItem.link"
+                      class="flex items-center w-full p-2 text-gray-600 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                    >
+                      <span class="pl-3">
+                        {{ subItem.label }}
+                      </span>
+                    </a> -->
+                    <router-link :to="subItem.link" class="flex items-center w-full p-2 text-gray-600 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+                        <span class="pl-3">{{ subItem.label }}</span>
+                    </router-link>
+                  </li>
+                </ul>
+              </li>
+              <li v-else>
+                <router-link
+                  :to="item.link"
+                  class="flex items-center p-2 text-gray-600 rounded-lg dark:text-white hover:bg-gray-100 group"
+                >
+                  <font-awesome-icon class="icon" :icon="item.icon" />
+                  <span class="pl-3 flex-1 ms-3 whitespace-nowrap">{{
+                    item.label
+                  }}</span>
+                </router-link>
+              </li>
+            </template>
           </ul>
         </div>
       </aside>
-      
+
       <div class="p-4 sm:ml-64">
         <div class="p-12">
-            <router-view></router-view>
+          <router-view></router-view>
         </div>
       </div>
     </div>
   </div>
-
 </template>
 
 <script setup>
-import { initFlowbite } from 'flowbite'
-import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
-import { supabase } from '../supabase/supabase';
+import { initFlowbite } from "flowbite";
+import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
+import { supabase } from "../supabase/supabase";
 const navItems = ref([
   // { label: "Dashboard", link: "#" },
   // { label: "Settings", link: "#" },
   // { label: "Earnings", link: "#" },
-  { label: "Sign out" ,code: 'SO'},
+  { label: "Sign out", code: "SO" },
 ]);
 
 const menuItems = ref([
@@ -174,6 +192,20 @@ const menuItems = ref([
     label: "Dashboard",
     icon: ["fa-solid", "fa-list"],
     link: "dashboard",
+  },
+  {
+    label: "Department",
+    icon: ["fa-solid", "fa-calendar-minus"],
+    submenu: [
+      {
+        label: "Department List",
+        link: "/department/list",
+      },
+      {
+        label: "Department Add",
+        link: "/department/add",
+      },
+    ],
   },
   {
     label: "School",
@@ -190,25 +222,19 @@ const menuItems = ref([
     icon: ["fa-solid", "fa-graduation-cap"],
     link: "course",
   },
-  {
-    label: "Exam",
-    icon: ["fa-solid", "fa-calendar-minus"],
-    link: "exam",
-  },
 ]);
 
 const router = useRouter();
 
 const onClickTopBar = async (item) => {
-
-  if(item.code == 'SO' ){
+  if (item.code == "SO") {
     console.log(`Clicked on item: ${item.code}`);
-    const { error } = await supabase.auth.signOut()
-    if(error == null){
-      console.log(`error`,error);
-      router.push('login')
+    const { error } = await supabase.auth.signOut();
+    if (error == null) {
+      console.log(`error`, error);
+      localStorage.removeItem("expires_at");
+      router.push("login");
     }
-    
   }
 };
 

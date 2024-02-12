@@ -21,9 +21,7 @@ const refreshLogin = async () => {
     store.dispatch("refreshLogin", session);
   }
 };
-
 onMounted(() => {
-  console.log('refresh main')
   refreshLogin();
   initFlowbite();
 });

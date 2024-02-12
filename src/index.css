@@ -8,7 +8,7 @@
 
 @layer tailwind-base {
     @tailwind base;
-    
+
 }
 
 @layer tailwind-utilities {
@@ -20,22 +20,30 @@
 :root {
     --primary-color: #007bff !important;
     --pv-checkbox-tick-color: #007bff !important;
-    --link-color : #006cab;
+    --link-color: #006cab;
 }
 
 body {
     box-sizing: border-box;
 }
-.width-5{
+
+.width-5 {
     width: 500px;
 }
-.p-inputtext{
+
+.p-inputtext {
     width: 100% !important;
 }
-.p-checkbox.p-highlight .p-checkbox-box{
+
+.p-checkbox.p-highlight .p-checkbox-box {
     border-color: var(--primary-color);
     background: var(--primary-color);
 }
-.link-color{
+
+.link-color {
     color: var(--link-color);
+}
+
+.active {
+    background-color: aqua;
 }

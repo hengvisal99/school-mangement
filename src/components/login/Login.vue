@@ -109,7 +109,7 @@ import { useForm } from "vee-validate";
 import * as yup from "yup";
 import { useStore } from "vuex";
 import { computed } from "vue";
-import { useRouter } from 'vue-router';
+
 const store = useStore();
 const { defineField, errors, handleSubmit } = useForm({
   validationSchema: yup.object({
@@ -128,6 +128,7 @@ const login = handleSubmit(async (values) => {
   store.dispatch("login", {
     email: values.username,
     password: values.password,
+    remember_me : values.remember_me
   });
 });
 

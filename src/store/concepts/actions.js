@@ -4,16 +4,22 @@ import router from '../../router/index';
 import store from "../store";
 import { jwtDecode } from "jwt-decode";
 export const actions = {
-  async login({ commit }, { email, password }) {
+  async login({ commit }, { email, password, remember_me }) {
     commit('setLoading', true);
     const { data: { user, session }, error } = await supabase.auth.signInWithPassword({ email, password })
     if (session) {
+
       commit('setUser', session.user);
       commit('setToken', session.access_token);
       commit('setLoginError', error);
 
       const routeName = store.state.redirectedFrom || "/school";
-      console.log('route name',routeName)
+      let expires_at = session.expires_at;
+      if (remember_me) {
+        const threeDaysInSeconds = 3 * 24 * 60 * 60; // Convert 3 days to seconds
+        expires_at += threeDaysInSeconds; // Add 3 days in seconds
+      }
+      localStorage.setItem('expires_at', expires_at);
       router.push(routeName)
     }
     else if (error) {
@@ -21,17 +27,19 @@ export const actions = {
     }
     commit('setLoading', false);
   },
-  refreshLogin({ commit }, session) {
-    console.log('vuex refresh login',session.access_token)
+  async refreshLogin({ commit }, session) {
     const token = session.access_token;
-    const decodedToken = jwtDecode(token);
-    const currentTime = Date.now() / 1000;
+    const currentTime = Math.floor(Date.now() / 1000);
+    const expires_at = localStorage.getItem('expires_at')
 
-    store.state.token = token
-    console.log(decodedToken.exp,currentTime)
-    if (decodedToken.exp < currentTime) {
-      router.push('login')
-      console.log("Token has expired");
+    commit('setUser', session)
+    commit('setToken', token)
+    if (expires_at < currentTime) {
+      const { error } = await supabase.auth.signOut();
+      if (error == null) {
+        localStorage.removeItem('expires_at');
+        router.push('login')
+      }
     } else {
       console.log("Token is still valid");
     }
