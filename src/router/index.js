@@ -24,34 +24,31 @@ const routes = [
         },
         component: () => import('../components/content/School.vue'),
       },
-      // Other routes...
       {
         path: 'department',
+        redirect: '/department/list',
         meta: {
           requireAuth: true
         },
-        component: () => import('../components/content/department/DepartmentList.vue'), // Add a layout component for department routes
+        component: () => import('../components/content/department/DepartmentLayout.vue'), // Add a layout component for department routes
         children: [
           {
-            path: '', // Default route for department layout
-            redirect: 'list' // Redirect to the department list
-          },
-          {
-            path: 'list', // Child route for the department list
+            path: 'list', 
             component: () => import('../components/content/department/DepartmentList.vue'),
-            name: 'department-list',
           },
           {
-            path: 'add', // Child route for the department list
+            path: 'add', 
             component: () => import('../components/content/department/DepartmentAdd.vue'),
-            name: 'department-add',
           },
-          // Add other child routes as needed (e.g., 'add' route)
         ]
       },
     ],
   },
-  // Other top-level routes...
+  {
+    path: '/login',
+    name: 'login',
+    component: () => import('../components/login/Login.vue'),
+  },
 ];
 
 
@@ -61,22 +58,22 @@ const router = createRouter({
   linkActiveClass: 'active'
 })
 console.log('router',router)
-// router.beforeEach(async (to, from, next) => {
-//   // console.log('Before each guard triggered');
-//   // console.log('From:', from);
-//   // console.log('To:', to);
-//   const redirectedRoute = to?.redirectedFrom?.fullPath || from.fullPath
-//   const { data: { session } } = await supabase.auth.getSession();
-//   const isAuthenticated = !!session;
-//   store.commit("setRedirectedFrom", redirectedRoute);
-//   console.log('isAuthenticated', isAuthenticated)
-//   if (to.meta.requireAuth && !isAuthenticated) {
-//     next({ name: 'login' });
-//   } else {
-//     next();
-//   }
+router.beforeEach(async (to, from, next) => {
+  // console.log('Before each guard triggered');
+  // console.log('From:', from);
+  // console.log('To:', to);
+  const redirectedRoute = to?.redirectedFrom?.fullPath || from.fullPath
+  const { data: { session } } = await supabase.auth.getSession();
+  const isAuthenticated = !!session;
+  store.commit("setRedirectedFrom", redirectedRoute);
+  console.log('isAuthenticated', isAuthenticated)
+  if (to.meta.requireAuth && !isAuthenticated) {
+    next({ name: 'login' });
+  } else {
+    next();
+  }
 
-// });
+});
 
 
 export default router

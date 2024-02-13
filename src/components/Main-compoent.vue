@@ -31,13 +31,13 @@
               </button>
               <a href="https://flowbite.com" class="flex ms-2 md:me-24">
                 <img
-                  src="https://flowbite.com/docs/images/logo.svg"
+                  src="../assets/school_logo.png"
                   class="h-8 me-3"
                   alt="FlowBite Logo"
                 />
                 <span
                   class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white"
-                  >Flowbite</span
+                  >School Management System</span
                 >
               </a>
             </div>
@@ -101,22 +101,26 @@
         aria-label="Sidebar"
       >
         <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
-          <ul class="space-y-2 font-medium">
+          <ul class="space-y-2 font-medium list">
             <template v-for="(item, index) in menuItems" :key="index">
               <li v-if="item.submenu">
                 <button
+                  :class="{ active: isActiveMainMenu(item.submenu) }"
                   type="button"
-                  class="flex items-center w-full p-2 text-base text-gray-600 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                  class="flex items-center w-full p-2 text-base text-gray-600 transition duration-75 rounded-lg group hover:bg-gray-100"
                   :aria-controls="'dropdown-' + index"
                   :data-collapse-toggle="'dropdown-' + index"
+                  @click="toggleDropdown"
                 >
                   <font-awesome-icon class="icon" :icon="item.icon" />
                   <span
                     class="pl-3 flex-1 ms-3 text-left rtl:text-right whitespace-nowrap"
                     >{{ item.label }}</span
                   >
+
                   <svg
-                    class="w-3 h-3"
+                    :class="{ 'rotate-down': isDropdownOpen }"
+                    class="w-3 h-3 rotate-270"
                     aria-hidden="true"
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -136,16 +140,11 @@
                     v-for="(subItem, subIndex) in item.submenu"
                     :key="subIndex"
                   >
-                    <!-- <a
-                      :href="subItem.link"
-                      class="flex items-center w-full p-2 text-gray-600 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                    <router-link
+                      :to="subItem.link"
+                      class="flex items-center w-full p-2 text-gray-600 transition duration-75 rounded-lg pl-11 group custom-active-class"
                     >
-                      <span class="pl-3">
-                        {{ subItem.label }}
-                      </span>
-                    </a> -->
-                    <router-link :to="subItem.link" class="flex items-center w-full p-2 text-gray-600 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
-                        <span class="pl-3">{{ subItem.label }}</span>
+                      <span class="pl-3">{{ subItem.label }}</span>
                     </router-link>
                   </li>
                 </ul>
@@ -153,7 +152,7 @@
               <li v-else>
                 <router-link
                   :to="item.link"
-                  class="flex items-center p-2 text-gray-600 rounded-lg dark:text-white hover:bg-gray-100 group"
+                  class="flex items-center p-2 text-gray-600 rounded-lg dark:text-white custom-active-class group"
                 >
                   <font-awesome-icon class="icon" :icon="item.icon" />
                   <span class="pl-3 flex-1 ms-3 whitespace-nowrap">{{
@@ -191,7 +190,7 @@ const menuItems = ref([
   {
     label: "Dashboard",
     icon: ["fa-solid", "fa-list"],
-    link: "dashboard",
+    link: "/dashboard",
   },
   {
     label: "Department",
@@ -210,20 +209,20 @@ const menuItems = ref([
   {
     label: "School",
     icon: ["fa-solid", "fa-school"],
-    link: "school",
+    link: "/school",
   },
   {
     label: "Teacher",
     icon: ["fa-solid", "fa-person-chalkboard"],
-    link: "teacher",
+    link: "/teacher",
   },
   {
     label: "Course",
     icon: ["fa-solid", "fa-graduation-cap"],
-    link: "course",
+    link: "/course",
   },
 ]);
-
+const isDropdownOpen = ref(false);
 const router = useRouter();
 
 const onClickTopBar = async (item) => {
@@ -237,7 +236,14 @@ const onClickTopBar = async (item) => {
     }
   }
 };
-
+const isActiveMainMenu = (submenu) => {
+  const path = router.currentRoute._value.fullPath;
+  return submenu.some((subItem) => path === subItem.link);
+};
+const toggleDropdown = () => {
+  console.log(isDropdownOpen.value);
+  isDropdownOpen.value = !isDropdownOpen.value;
+};
 onMounted(() => {
   initFlowbite();
 });
@@ -247,4 +253,15 @@ onMounted(() => {
 .icon {
   min-width: 23px;
 }
+button.active {
+  background: #fff;
+  color: var(--primary-color);
+}
+.rotate-270 {
+  transform: rotate(270deg);
+}
+.rotate-down {
+  transform: rotate(0deg) !important;
+}
+
 </style>

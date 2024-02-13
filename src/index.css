@@ -16,6 +16,15 @@
     @tailwind utilities;
 }
 
+@layer utilities {
+    .custom-active-class:hover {
+        background-color: rgb(241 245 249);
+    }
+    .custom-active-class:active {
+        background-color: var(--primary-color);
+        color: #fff;
+    }
+}
 
 :root {
     --primary-color: #007bff !important;
@@ -45,5 +54,6 @@ body {
 }
 
 .active {
-    background-color: aqua;
+    background-color: var(--primary-color);
+    color: #fff;
 }
