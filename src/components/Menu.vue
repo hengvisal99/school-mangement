@@ -101,6 +101,11 @@
             </ul>
         </div>
     </aside>
+    <div class="p-4 sm:ml-64">
+        <div class="p-12">
+          <router-view></router-view>
+        </div>
+      </div>
 </template>
 <script setup>
 import { ref, onMounted,watch } from 'vue';

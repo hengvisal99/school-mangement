@@ -1,14 +1,9 @@
 <template>
   <div>
-    <div>
-      <Menu :menuItems="menuItems" :navItems="navItems"></Menu>
-      <div class="p-4 sm:ml-64">
-        <div class="p-12">
-          <router-view></router-view>
-        </div>
-      </div>
-    </div>
+    <Menu :menuItems="menuItems" :navItems="navItems"></Menu>
+
   </div>
+
 </template>
 
 <script setup>
