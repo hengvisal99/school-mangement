@@ -57,3 +57,7 @@ body {
     background-color: var(--primary-color);
     color: #fff;
 }
+
+.primary-corlor{
+    color: var(--primary-color);
+}

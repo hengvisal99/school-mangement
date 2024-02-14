@@ -12,17 +12,12 @@ const routes = [
         redirect: 'school' // Redirect to the 'school' route
       },
       {
-        path: '/:pathMatch(.*)*', // Catch-all route for handling not found routes
-        name: 'NotFound',
-        component: () => import('../components/content/PageNotFound.vue'),
-      },
-      {
-        path: 'school',
-        name: 'school',
+        path: 'course',
+        name: 'course',
         meta: {
           requireAuth: true
         },
-        component: () => import('../components/content/School.vue'),
+        component: () => import('../components/content/Courses.vue'),
       },
       {
         path: 'department',
@@ -30,7 +25,7 @@ const routes = [
         meta: {
           requireAuth: true
         },
-        component: () => import('../components/content/department/DepartmentLayout.vue'), // Add a layout component for department routes
+        component: () => import('../components/content/department/DepartmentLayout.vue'), 
         children: [
           {
             path: 'list', 
@@ -42,12 +37,53 @@ const routes = [
           },
         ]
       },
+      {
+        path: 'teacher',
+        redirect: '/teacher/list',
+        meta: {
+          requireAuth: true
+        },
+        component: () => import('../components/content/teacher/TeacherLayout.vue'), 
+        children: [
+          {
+            path: 'list', 
+            component: () => import('../components/content/teacher/TeacherList.vue'),
+          },
+          {
+            path: 'add', 
+            component: () => import('../components/content/teacher/TeacherAdd.vue'),
+          },
+        ]
+      },
+      {
+        path: 'role-management',
+        redirect: '/role-management/role',
+        meta: {
+          requireAuth: true
+        },
+        component: () => import('../components/content/role-management/RoleManagement.vue'),
+        children: [
+          {
+            path: 'roles', 
+            component: () => import('../components/content/role-management/Roles.vue'),
+          },
+          {
+            path: 'permissions', 
+            component: () => import('../components/content/role-management/Permissions.vue'),
+          },
+        ]
+      },
     ],
   },
   {
     path: '/login',
     name: 'login',
     component: () => import('../components/login/Login.vue'),
+  },
+  {
+    path: '/:pathMatch(.*)*', // Catch-all route for handling not found routes
+    name: 'NotFound',
+    component: () => import('../components/page-error/PageNotFound.vue'),
   },
 ];
 
@@ -57,7 +93,6 @@ const router = createRouter({
   routes,
   linkActiveClass: 'active'
 })
-console.log('router',router)
 router.beforeEach(async (to, from, next) => {
   // console.log('Before each guard triggered');
   // console.log('From:', from);

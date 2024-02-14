@@ -10,7 +10,7 @@ import 'primevue/resources/themes/aura-light-green/theme.css'
 // Style
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { faUserSecret , faHouse,faCaretDown,faCalendarMinus,faGraduationCap,faPersonChalkboard,faSchool,faList} from '@fortawesome/free-solid-svg-icons'
+import { faUserSecret , faHouse,faCaretDown,faCalendarMinus,faGraduationCap,faPersonChalkboard,faSchool,faList,faGear} from '@fortawesome/free-solid-svg-icons'
 import { faFacebook ,faGithub} from '@fortawesome/free-brands-svg-icons'
 import 'material-icons/iconfont/material-icons.css';
 
@@ -27,7 +27,7 @@ import Message from 'primevue/message';
 // Vuex
 import store from './store/store';
 
-library.add(faFacebook,faGithub,faUserSecret,faHouse,faCaretDown,faCalendarMinus,faGraduationCap,faPersonChalkboard,faSchool,faList)
+library.add(faGear,faFacebook,faGithub,faUserSecret,faHouse,faCaretDown,faCalendarMinus,faGraduationCap,faPersonChalkboard,faSchool,faList)
 
 const app = createApp(App);
 app.component('font-awesome-icon', FontAwesomeIcon)
