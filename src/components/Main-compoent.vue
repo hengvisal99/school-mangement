@@ -2,7 +2,6 @@
   <div>
     <TopBar :navItems="navItems"></TopBar>
     <Menu :menuItems="menuItems"></Menu>
-
   </div>
 
 </template>
