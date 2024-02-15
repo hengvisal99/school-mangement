@@ -1,6 +1,7 @@
 <template>
   <div>
-    <Menu :menuItems="menuItems" :navItems="navItems"></Menu>
+    <TopBar :navItems="navItems"></TopBar>
+    <Menu :menuItems="menuItems"></Menu>
 
   </div>
 
@@ -9,7 +10,8 @@
 <script setup>
 import { ref } from "vue";
 
-import Menu  from "./Menu.vue";
+import Menu  from "./navigation/Menu.vue";
+import TopBar  from "./navigation/TopBar.vue";
 const navItems = ref([
   // { label: "Dashboard", link: "#" },
   // { label: "Settings", link: "#" },

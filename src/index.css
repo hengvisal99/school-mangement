@@ -61,3 +61,14 @@ body {
 .primary-corlor{
     color: var(--primary-color);
 }
+.app{
+    background: #f8f7fa;
+    height: 100vh;
+}
+.main-card{
+    padding-top: 88px;
+}
+.content{
+    height: 86vh;
+    padding: 1rem
+}

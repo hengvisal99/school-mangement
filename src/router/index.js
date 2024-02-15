@@ -9,7 +9,14 @@ const routes = [
     children: [
       {
         path: '', // Default route
-        redirect: 'school' // Redirect to the 'school' route
+        redirect: 'dashboard' 
+      },
+      {
+        path: 'dashboard',
+        meta: {
+          requireAuth: true
+        },
+        component: () => import('../components/content/dashboard/Dashboard.vue'),
       },
       {
         path: 'course',
@@ -83,6 +90,9 @@ const routes = [
   {
     path: '/:pathMatch(.*)*', // Catch-all route for handling not found routes
     name: 'NotFound',
+    meta: {
+      requireAuth: true
+    },
     component: () => import('../components/page-error/PageNotFound.vue'),
   },
 ];

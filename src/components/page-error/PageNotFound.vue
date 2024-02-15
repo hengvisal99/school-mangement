@@ -17,7 +17,7 @@
         </h1>
 
         <router-link
-          to="/department"
+          to="/dashboard"
           class="text-white bg-primary  hover:bg-blue-700 focus:ring-4 focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center mr-3 mt-4"
         >
           <svg

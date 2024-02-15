@@ -6,12 +6,10 @@
 
 
 <script setup>
-import { initFlowbite } from "flowbite";
 import { onMounted } from "vue";
 import { supabase } from "./supabase/supabase";
 import { useStore } from "vuex";
 const store = useStore();
-initFlowbite();
 const refreshLogin = async () => {
   const {
     data: { session },
@@ -23,7 +21,6 @@ const refreshLogin = async () => {
 };
 onMounted(() => {
   refreshLogin();
-  initFlowbite();
 });
 </script>
 
