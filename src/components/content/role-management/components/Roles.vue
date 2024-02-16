@@ -2,7 +2,8 @@
     <div class="card">
         <DataTable v-model:filters="filters" v-model:selection="selectedCustomer" :value="customers" stateStorage="session"
             stateKey="dt-state-demo-session" paginator :rows="5" filterDisplay="menu" selectionMode="single" dataKey="id"
-            paginatorTemplate="FirstPageLink  PageLinks  LastPageLink CurrentPageReport RowsPerPageDropdown" :rowsPerPageOptions="[5,10,25]"
+            paginatorTemplate="FirstPageLink  PrevPageLink PageLinks  NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown" :rowsPerPageOptions="[5,10,25]"
+            :pageLinkSize = "3"
             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} roles"
             :globalFilterFields="['name', 'country.name', 'representative.name', 'status']" tableStyle="min-width: 50rem">
             <template #header>

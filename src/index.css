@@ -42,9 +42,6 @@ body {
     width: 500px;
 }
 
-.p-password-input {
-    width: 100% !important;
-}
 
 .p-checkbox.p-highlight .p-checkbox-box {
     border-color: var(--primary-color);

@@ -7,7 +7,7 @@
         <img src="@/assets/study.svg" alt="SVG image" />
       </div>
 
-      <div class="flex flex-col basis-6/12 justify-center items-center">
+      <div class="bg-white flex flex-col basis-6/12 justify-center items-center">
         <div class="border rounded-2xl p-8 shadow-lg width-5">
           <h1 class="text-center text-2xl p-5 font-bold">
             School Management System
@@ -34,6 +34,7 @@
             <Password
               class="w-full"
               v-model="password"
+              :inputStyle="{ width: '100%' }"
               toggleMask
               :feedback="false"
               :class="{ 'p-invalid': errors.password }"
