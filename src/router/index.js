@@ -64,7 +64,7 @@ const routes = [
       },
       {
         path: 'role-management',
-        redirect: '/role-management/role',
+        redirect: '/role-management/roles',
         meta: {
           requireAuth: true
         },
@@ -72,11 +72,11 @@ const routes = [
         children: [
           {
             path: 'roles', 
-            component: () => import('../components/content/role-management/Roles.vue'),
+            component: () => import('../components/content/role-management/components/Roles.vue'),
           },
           {
             path: 'permissions', 
-            component: () => import('../components/content/role-management/Permissions.vue'),
+            component: () => import('../components/content/role-management/components/Permissions.vue'),
           },
         ]
       },

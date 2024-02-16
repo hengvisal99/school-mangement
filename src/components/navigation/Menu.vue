@@ -62,7 +62,7 @@ const props = defineProps({
         required: true,
     }
 });
-const isDropdownOpen = ref(Array(props.menuItems.length).fill(false));
+const isDropdownOpen = ref(Array(props.menuItems.length).fill(true));
 const toggleDropdown = (index) => {
     isDropdownOpen.value[index] = !isDropdownOpen.value[index];
 };

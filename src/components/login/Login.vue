@@ -139,6 +139,9 @@ const login = handleSubmit(async (values) => {
   display: flex;
   flex-direction: row;
 }
+.p-inputtext {
+    width: 100% !important;
+}
 .h-line:before,
 .h-line:after {
   content: "";
@@ -165,4 +168,6 @@ const login = handleSubmit(async (values) => {
 img {
   height: 500px;
 }
+
+
 </style>

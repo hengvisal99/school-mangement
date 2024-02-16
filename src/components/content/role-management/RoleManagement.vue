@@ -1,6 +1,5 @@
 <template>
     <div>
-        role Management
         <router-view></router-view>
     </div>
 </template>

@@ -25,7 +25,9 @@
         color: #fff;
     }
 }
-
+*{
+    box-sizing: border-box;
+}
 :root {
     --primary-color: #007bff !important;
     --pv-checkbox-tick-color: #007bff !important;
@@ -40,7 +42,7 @@ body {
     width: 500px;
 }
 
-.p-inputtext {
+.p-password-input {
     width: 100% !important;
 }
 

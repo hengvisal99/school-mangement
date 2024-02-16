@@ -1,6 +1,6 @@
 <template>
     <div>
-        role
+        <p>permissions</p>
     </div>
 </template>
 

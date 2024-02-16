@@ -14,6 +14,8 @@ import { faUserSecret , faHouse,faCaretDown,faCalendarMinus,faGraduationCap,faPe
 import { faFacebook ,faGithub} from '@fortawesome/free-brands-svg-icons'
 import 'material-icons/iconfont/material-icons.css';
 
+import 'primeicons/primeicons.css'
+
 // PrimeVue
 import PrimeVue from 'primevue/config';
 import Button from 'primevue/button';
@@ -23,10 +25,11 @@ import Password from 'primevue/password';
 import InputText from 'primevue/inputtext';
 import Checkbox from 'primevue/checkbox';
 import Message from 'primevue/message';
-
+import DataTable from 'primevue/datatable';
+import Column from 'primevue/column';
 // Vuex
 import store from './store/store';
-
+import i18n from './I18n/i18n';
 library.add(faGear,faFacebook,faGithub,faUserSecret,faHouse,faCaretDown,faCalendarMinus,faGraduationCap,faPersonChalkboard,faSchool,faList)
 
 const app = createApp(App);
@@ -38,7 +41,9 @@ app.component('Password', Password);
 app.component('InputText', InputText);
 app.component('Checkbox', Checkbox);
 app.component('Message', Message);
-
+app.component('Column', Column);
+app.component('DataTable', DataTable);
+app.use(i18n)
 app.use(PrimeVue);
 app.use(store);
 app.use(router).mount('#app');

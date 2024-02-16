@@ -9,6 +9,7 @@
 import { onMounted } from "vue";
 import { supabase } from "./supabase/supabase";
 import { useStore } from "vuex";
+
 const store = useStore();
 const refreshLogin = async () => {
   const {
