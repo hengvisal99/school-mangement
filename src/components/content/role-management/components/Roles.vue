@@ -13,7 +13,7 @@
                     <div>
                         <InputText class="mr-4" v-model="filters['global'].value" placeholder="Search Role">
                         </InputText>
-                        <Button label="Add Role"  @click="showRoles"
+                        <Button label="Add Role" @click="showRoles"
                             class="w-44 active:bg-primary-700 hover:bg-primary-800 focus:outline-none bg-primary border-primary " />
                     </div>
                 </div>
@@ -39,7 +39,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted ,defineAsyncComponent} from 'vue';
+import { ref, onMounted, defineAsyncComponent } from 'vue';
 import { CustomerService } from '../../../../service/CustomerService';
 import { FilterMatchMode, FilterOperator } from 'primevue/api';
 import { useDialog } from 'primevue/usedialog';
@@ -63,14 +63,16 @@ const filters = ref(
 
 
 const showRoles = () => {
-    console.log('show',dialog)
-   const dialogRef = dialog.open(rolesList, {
+    console.log('show', dialog)
+    const dialogRef = dialog.open(rolesList, {
         props: {
+            header: 'Add New Role',
             style: {
                 width: '900px',
                 height: '900px',
+
             },
-            breakpoints:{
+            breakpoints: {
                 '960px': '75vw',
                 '640px': '90vw'
             },
@@ -92,5 +94,4 @@ const confirmDeleteProduct = (prod) => {
 };
 </script>
 
-<style lang="css" scoped>
-</style>
+<style lang="css" scoped></style>
