@@ -2,7 +2,7 @@
     <div class="card">
         <DataTable v-model:filters="filters" v-model:selection="selectedCustomer" :value="customers" stateStorage="session"
             stateKey="dt-state-demo-session" paginator :rows="5" filterDisplay="menu" selectionMode="single" dataKey="id"
-            paginatorTemplate="FirstPageLink  PrevPageLink PageLinks  NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+            paginatorTemplate="FirstPageLink   PageLinks  LastPageLink CurrentPageReport RowsPerPageDropdown"
             :rowsPerPageOptions="[5, 10, 25]" :pageLinkSize="3" removableSort
             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} roles"
             :globalFilterFields="['name', 'country.name', 'representative.name', 'status']" tableStyle="min-width: 50rem">
@@ -13,7 +13,7 @@
                     <div>
                         <InputText class="mr-4" v-model="filters['global'].value" placeholder="Search Role">
                         </InputText>
-                        <Button label="Add Role"
+                        <Button label="Add Role"  @click="showRoles"
                             class="w-44 active:bg-primary-700 hover:bg-primary-800 focus:outline-none bg-primary border-primary " />
                     </div>
                 </div>
@@ -39,12 +39,18 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted ,defineAsyncComponent} from 'vue';
 import { CustomerService } from '../../../../service/CustomerService';
 import { FilterMatchMode, FilterOperator } from 'primevue/api';
-
+import { useDialog } from 'primevue/usedialog';
+import { useToast } from 'primevue/usetoast';
+// import rolesList from '@/UI/dialog/RoleDialog.vue';
 const customers = ref();
 const selectedCustomer = ref();
+const dialog = useDialog();
+
+// const toast = useToast();
+const rolesList = defineAsyncComponent(() => import('@/UI/dialog/RoleDialog.vue'));
 const filters = ref(
     {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -54,19 +60,24 @@ const filters = ref(
         status: { operator: FilterOperator.OR, constraints: [{ value: null, matchMode: FilterMatchMode.EQUALS }] }
     }
 );
-const representatives = ref([
-    { name: 'Amy Elsner', image: 'amyelsner.png' },
-    { name: 'Anna Fali', image: 'annafali.png' },
-    { name: 'Asiya Javayant', image: 'asiyajavayant.png' },
-    { name: 'Bernardo Dominic', image: 'bernardodominic.png' },
-    { name: 'Elwin Sharvill', image: 'elwinsharvill.png' },
-    { name: 'Ioni Bowcher', image: 'ionibowcher.png' },
-    { name: 'Ivan Magalhaes', image: 'ivanmagalhaes.png' },
-    { name: 'Onyama Limba', image: 'onyamalimba.png' },
-    { name: 'Stephen Shaw', image: 'stephenshaw.png' },
-    { name: 'XuXue Feng', image: 'xuxuefeng.png' }
-]);
 
+
+const showRoles = () => {
+    console.log('show',dialog)
+   const dialogRef = dialog.open(rolesList, {
+        props: {
+            style: {
+                width: '900px',
+                height: '900px',
+            },
+            breakpoints:{
+                '960px': '75vw',
+                '640px': '90vw'
+            },
+            modal: true
+        },
+    });
+}
 onMounted(() => {
     CustomerService.getCustomersMedium().then((data) => (customers.value = data));
 });
@@ -82,7 +93,4 @@ const confirmDeleteProduct = (prod) => {
 </script>
 
 <style lang="css" scoped>
-.p-button.p-button-outlined {
-    /* border-color: var(--primary-color) */
-}
 </style>

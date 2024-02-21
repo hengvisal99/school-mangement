@@ -27,6 +27,9 @@ import Checkbox from 'primevue/checkbox';
 import Message from 'primevue/message';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
+import Dialog from 'primevue/dialog';
+import DialogService from 'primevue/dialogservice';
+import DynamicDialog from 'primevue/dynamicdialog';
 // Vuex
 import store from './store/store';
 import i18n from './I18n/i18n';
@@ -43,6 +46,9 @@ app.component('Checkbox', Checkbox);
 app.component('Message', Message);
 app.component('Column', Column);
 app.component('DataTable', DataTable);
+app.component('Dialog', Dialog);
+app.component('DynamicDialog', DynamicDialog);
+app.use(DialogService);
 app.use(i18n)
 app.use(PrimeVue);
 app.use(store);
