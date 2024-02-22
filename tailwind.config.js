@@ -12,6 +12,10 @@ export default {
         'primary-600': '#068fff',
         'primary-700': '#085ec5',
         'primary-800': '#0968dc',
+      },
+      screens: {
+        // 'sm': '400px',
+        // => @media (min-width: 640px) { ... }
       }
     },
   },

@@ -1,9 +1,6 @@
 <template>
     <div class="flex flex-col ">
-        <div class="flex flex-col flex-wrap justify-center content-center gap-2">
-            <p class="text-xl">Set Role Permissions</p>
-            <!-- <p class="text-base text-center">Set Role Permissions</p> -->
-        </div>
+
         <form @submit.prevent="submitForm">
             <div class="p-4 flex gap-3 flex-col">
                 <div class="flex flex-col gap-2">
@@ -11,19 +8,21 @@
                     <InputText id="username" v-model="roleName" />
                 </div>
 
-                <p class="text-xl">Role Permissions</p>
+                <p class="text-xl font-medium">Role Permissions</p>
                 <div class="mb-4">
                     <table class="w-full">
                         <tr class="border-b border-gray-200">
                             <td>Administrator Access</td>
                             <td colspan="4">
                                 <div class="flex justify-end">
-                                    <Checkbox v-model="selectAll" inputId="checkAll" :binary="true" @change="selectAllPermissions" />
+                                    <Checkbox v-model="selectAll" inputId="checkAll" :binary="true"
+                                        @change="selectAllPermissions" />
                                     <label for="checkAll" class="ml-2">Select All</label>
                                 </div>
                             </td>
                         </tr>
-                        <tr class="border-b border-gray-200" v-for="(permission, index) in permissionsList" :key="permission.code">
+                        <tr class="border-b border-gray-200" v-for="(permission, index) in permissionsList"
+                            :key="permission.code">
                             <td>{{ permission.name }}</td>
                             <td>
                                 <div class="flex justify-end">
@@ -53,8 +52,9 @@
                     </table>
                 </div>
                 <div class="flex gap-2 justify-center">
-                    <Button type="submit" label="Submit" />
-                    <Button label="Cancel" />
+                    <Button label="Cancel" severity="danger" @click="actionButtonDialog({ buttonType: 'Cancel' })" />
+                    <Button type="submit" label="Submit" @click="actionButtonDialog({ buttonType: 'Submit' })"
+                        class="button-primary" />
                 </div>
             </div>
         </form>
@@ -62,14 +62,11 @@
 </template>
 
 <script setup>
-import { ref, onMounted, inject } from "vue";
-import { useDialog } from "primevue/usedialog";
-import { ProductService } from "@/service/ProductService";
-
+import { ref, inject } from "vue";
+import { useToast } from 'primevue/usetoast';
 const dialogRef = inject("dialogRef");
 const roleName = ref(null)
-const dialog = useDialog();
-const products = ref(null);
+const toast = useToast();
 const permissionsList = ref([
     {
         name: "Dashboard Management",
@@ -101,7 +98,7 @@ const permissionsList = ref([
         read: false,
         write: true,
         create: true,
-        delete: false, 
+        delete: false,
     }
 ])
 const selectAll = ref(false);
@@ -113,15 +110,26 @@ const selectAllPermissions = () => {
         permission.delete = selectAll.value;
     });
 };
+const checkPermission = () => permissionsList.value.some(permission =>
+    permission.read || permission.write || permission.create || permission.delete
+);
 
 
-onMounted(() => {
-    ProductService
-        .getProductsSmall()
-        .then((data) => (products.value = data.slice(0, 5)));
-});
 
+const actionButtonDialog = (e) => {
+    const button = e.buttonType;
+    const atLeastOneTrue = checkPermission(permissionsList);
+    console.log('atleaseone',atLeastOneTrue)
+    if (button === 'Submit') {
+        if(atLeastOneTrue) dialogRef.value.close(e);
+        else {
+            toast.add({ severity: 'error', summary: 'Error Message', detail: 'Please Select Atlease One Permission', life: 3000 });
+        }
+        return
+    }
+    dialogRef.value.close(e);
 
+};
 const submitForm = () => {
     // Handle form submission here, e.g., send data to server
     console.log(permissionsList.value);
@@ -133,5 +141,4 @@ const submitForm = () => {
 td {
     padding-top: 1rem;
     padding-bottom: 1rem;
-}
-</style>
+}</style>

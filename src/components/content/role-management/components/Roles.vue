@@ -7,14 +7,17 @@
             currentPageReportTemplate="Showing {first} to {last} of {totalRecords} roles"
             :globalFilterFields="['name', 'country.name', 'representative.name', 'status']" tableStyle="min-width: 50rem">
             <template #header>
-
-                <div class="flex justify-between items-center">
-                    <h3 class="text-center">Roles List</h3>
-                    <div>
-                        <InputText class="mr-4" v-model="filters['global'].value" placeholder="Search Role">
+                <!-- sm:max-md:flex-col  -->
+                <div class="flex justify-between items-center sm:max-md:flex-col gap-3">
+                    <h3 class="flex-none">Roles List</h3>
+                    <div class="flex flex-row  sm:max-md:gap-2  sm:flex-col max-w-[680px]">
+                        <InputText class="flex-initial mr-4 w-48" v-model="filters['global'].value" placeholder="Search Role">
                         </InputText>
                         <Button label="Add Role" @click="showRoles"
-                            class="w-44 active:bg-primary-700 hover:bg-primary-800 focus:outline-none bg-primary border-primary " />
+                            class="flex-initial w-44 active:bg-primary-700 
+                                 hover:bg-primary-800 focus:outline-none 
+                                 bg-primary border-primary 
+                                " />
                     </div>
                 </div>
 
@@ -44,13 +47,13 @@ import { CustomerService } from '../../../../service/CustomerService';
 import { FilterMatchMode, FilterOperator } from 'primevue/api';
 import { useDialog } from 'primevue/usedialog';
 import { useToast } from 'primevue/usetoast';
-// import rolesList from '@/UI/dialog/RoleDialog.vue';
+
+const rolesList = defineAsyncComponent(() => import('@/UI/dialog/RoleDialog.vue'));
 const customers = ref();
 const selectedCustomer = ref();
 const dialog = useDialog();
+const toast = useToast();
 
-// const toast = useToast();
-const rolesList = defineAsyncComponent(() => import('@/UI/dialog/RoleDialog.vue'));
 const filters = ref(
     {
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
@@ -78,8 +81,18 @@ const showRoles = () => {
             },
             modal: true
         },
+        onClose: (options) => {
+            console.log('dialog',options)
+            const data = options.data;
+            if (data) {
+                const buttonType = data.buttonType;
+                const summary_and_detail = buttonType === 'Cancel' ? { severity:'error', summary: 'No Role Selected', detail: `Pressed '${buttonType}' button` } : {severity:'info', summary: 'Role Selected', detail: data.name };
+                toast.add({ ...summary_and_detail, life: 3000 });
+            }
+        }
     });
 }
+
 onMounted(() => {
     CustomerService.getCustomersMedium().then((data) => (customers.value = data));
 });

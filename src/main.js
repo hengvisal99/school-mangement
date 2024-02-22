@@ -30,6 +30,9 @@ import Column from 'primevue/column';
 import Dialog from 'primevue/dialog';
 import DialogService from 'primevue/dialogservice';
 import DynamicDialog from 'primevue/dynamicdialog';
+import Toast from 'primevue/toast';
+import ToastService from 'primevue/toastservice';
+
 // Vuex
 import store from './store/store';
 import i18n from './I18n/i18n';
@@ -48,6 +51,8 @@ app.component('Column', Column);
 app.component('DataTable', DataTable);
 app.component('Dialog', Dialog);
 app.component('DynamicDialog', DynamicDialog);
+app.component('Toast', Toast);
+app.use(ToastService);
 app.use(DialogService);
 app.use(i18n)
 app.use(PrimeVue);
