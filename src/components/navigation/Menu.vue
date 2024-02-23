@@ -9,7 +9,8 @@
                         <button :class="{ active: isActiveMainMenu(item) }" type="button"
                             class="flex items-center w-full p-2 text-base text-gray-600 transition duration-75 rounded-lg group hover:bg-gray-100"
                             :aria-controls="'dropdown-' + index" :data-collapse-toggle="'dropdown-' + index"
-                            @click="toggleDropdown(index)">
+                            :aria-expanded="isDropdownOpen[index] ? true : false" @click="toggleDropdown(index) 
+                            ">
                             <font-awesome-icon class="icon" :icon="item.icon" />
                             <span class="pl-3 flex-1 ms-3 text-left rtl:text-right whitespace-nowrap">{{ item.label
                             }}</span>
@@ -21,8 +22,8 @@
                             </svg>
                         </button>
                         <ul :id="'dropdown-' + index" class="py-2 space-y-2"
-                            :class="{ 'hidden': !isDropdownOpen[index], 'block': isDropdownOpen[index] }">
-
+                        :style="{ display: isDropdownOpen[index] ? 'block' : 'none' }"
+                           >
                             <li v-for="(subItem, subIndex) in item.submenu" :key="subIndex">
                                 <router-link :to="subItem.link" @click="closeOtherDropdowns(index)"
                                     class="flex items-center w-full p-2 text-gray-600 transition duration-75 rounded-lg pl-11 group custom-active-class">
@@ -54,7 +55,8 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-
+import { initFlowbite } from 'flowbite'
+import { Modal } from 'flowbite'
 const router = useRouter();
 const props = defineProps({
     menuItems: {
@@ -77,9 +79,10 @@ const isActiveMainMenu = (menuItem) => {
     }
     return false;
 };
-
 onMounted(() => {
+    initFlowbite();
     isDropdownOpen.value = props.menuItems.map(item => isActiveMainMenu(item));
+
 });
 
 </script>
@@ -100,10 +103,5 @@ button.active {
 
 .rotate-down {
     transform: rotate(0deg) !important;
-}
-
-.block {
-    display: block !important;
-
 }
 </style>

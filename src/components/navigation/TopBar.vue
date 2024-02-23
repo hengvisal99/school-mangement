@@ -4,7 +4,7 @@
             <div class="px-3 py-3 lg:px-5 lg:pl-3">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center justify-start rtl:justify-end">
-                        <button data-drawer-target="logo-sidebar" data-drawer-toggle="logo-sidebar"
+                        <button @click="logoSideBar()" data-drawer-target="logo-sidebar" data-drawer-toggle="logo-sidebar"
                             aria-controls="logo-sidebar" type="button"
                             class="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
                             <span class="sr-only">Open sidebar</span>
@@ -34,8 +34,7 @@
                                         alt="user photo" />
                                 </button>
                             </div>
-                            <div 
-                            :class="{ 'hidden': !isDropdownOpen, 'drop-down': isDropdownOpen }"
+                            <div :class="{ 'hidden': !isDropdownOpen, 'drop-down': isDropdownOpen }"
                                 class="hidden z-50 my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600"
                                 id="dropdown-user">
                                 <div class="px-4 py-3" role="none">
@@ -68,6 +67,7 @@
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { supabase } from '../../supabase/supabase';
+
 const props = defineProps({
     navItems: {
         type: Array,
@@ -76,9 +76,12 @@ const props = defineProps({
 });
 const router = useRouter();
 const isDropdownOpen = ref(false);
+const isDropdownMenuOpen = ref(false);
 const toggleDropBar = () => {
     isDropdownOpen.value = !isDropdownOpen.value
-    console.log('tog', isDropdownOpen.value)
+};
+const logoSideBar = () => {
+    isDropdownMenuOpen.value = !isDropdownMenuOpen.value
 };
 const onClickTopBar = async (item) => {
     if (item.code == "SO") {
@@ -89,12 +92,14 @@ const onClickTopBar = async (item) => {
         }
     }
 };
+
+
 </script>
 
 <style lang="css" scoped>
 .drop-down {
     transform: translate(-136px, 81px);
-    display: block ;
+    display: block;
     position: absolute;
 }
 </style>
