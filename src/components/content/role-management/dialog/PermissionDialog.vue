@@ -27,6 +27,7 @@
 <script setup>
 import { ref, inject } from "vue";
 import { useToast } from 'primevue/usetoast';
+import userApi from '@/api/route/users';
 const dialogRef = inject("dialogRef");
 const roleName = ref(null)
 const toast = useToast();
@@ -36,15 +37,30 @@ const formData = ref({
     name: '',
 });
 
-const actionButtonDialog = (e) => {
+const actionButtonDialog = async (e) => {
     const button = e.buttonType;
-    console.log('button',button)   
+    console.log('button', button)
     if (button === 'Submit') {
-        if(formData.value.code == '' || formData.value.name == '')
-        {
+        if (formData.value.code == '' || formData.value.name == '') {
             toast.add({ severity: 'error', summary: 'Error Message', detail: 'Please Input Code or Name', life: 3000 });
             return
         }
+
+        const payload = {
+            code : formData.value.code,
+            name : formData.value.name
+        }
+        console.log('payload data',payload)
+        const {data,error} = await userApi.createPermission(payload)
+        if(data){
+            console.log('data',data)
+        }
+        else if(error){
+            console.error('Error creating permission:', error);
+            return
+        }
+           
+
     }
     dialogRef.value.close(e);
 

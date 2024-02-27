@@ -4,7 +4,6 @@ export const getters = {
     return state.user;
   },
   getToken(state) {
-    console.log('get token',state)
     return state.token;
   },
   getLoginError(state){

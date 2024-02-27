@@ -2,7 +2,6 @@
 import { supabase } from '../../supabase/supabase';
 import router from '../../router/index';
 import store from "../store";
-import { jwtDecode } from "jwt-decode";
 export const actions = {
   async login({ commit }, { email, password, remember_me }) {
     commit('setLoading', true);
