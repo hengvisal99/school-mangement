@@ -107,11 +107,10 @@ router.beforeEach(async (to, from, next) => {
   // console.log('Before each guard triggered');
   // console.log('From:', from);
   // console.log('To:', to);
-  const redirectedRoute = to?.redirectedFrom?.fullPath || from.fullPath
+  const redirectedRoute = to?.redirectedFrom?.name == "NotFound" ? from.fullPath : to?.redirectedFrom?.fullPath 
   const { data: { session } } = await supabase.auth.getSession();
   const isAuthenticated = !!session;
   store.commit("setRedirectedFrom", redirectedRoute);
-  console.log('isAuthenticated', isAuthenticated)
   if (to.meta.requireAuth && !isAuthenticated) {
     next({ name: 'login' });
   } else {

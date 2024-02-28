@@ -2,7 +2,7 @@ import supabase from '@/api';
 
 export const userApi = {
   getUsers: async () => {
-    const response =  await supabase.auth.getUser()
+    const response = await supabase.auth.getUser()
     return response.data
   },
   getUserById: async (userId) => {
@@ -11,7 +11,27 @@ export const userApi = {
   },
   createPermission: async (data) => {
     const response = await supabase.from('permissions')
-    .insert([data]);
+      .insert([data]);
+    return response
+  },
+  getPermission: async () => {
+    const response = await supabase
+      .from('permissions')
+      .select('*')
+    return response
+  },
+  updatePermission: async (data) => {
+    const response = await supabase
+      .from('permissions')
+      .update(data)
+      .eq('id', data.id);
+    return response
+  },
+  deletePermission: async (data) => {
+    const response = await supabase
+    .from('permissions')
+    .delete()
+    .eq('id', data.id);
     return response
   },
 }
