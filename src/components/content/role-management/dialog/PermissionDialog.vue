@@ -36,7 +36,6 @@ const formData = ref({
     code: '',
     name: '',
 });
-const payload = ref(null)
 const isEdit = ref(false)
 const actionButtonDialog = async (e) => {
     const button = e.buttonType;
@@ -52,35 +51,42 @@ const actionButtonDialog = async (e) => {
             name: formData.value.name
         };
 
-        if (formData.value.id) {
+        if (isEdit.value) {
             payloadData.id = formData.value.id;
-            await updatePermission(payloadData);
+            try {
+                await updatePermission(payloadData);
+            } catch (error) {
+                handleRequestError(error);
+                return;
+            }
         } else {
-            await createPermission(payloadData);
+            try {
+                await createPermission(payloadData);
+            } catch (error) {
+                handleRequestError(error);
+                return;
+            }
         }
     }
 
     dialogRef.value.close(e);
 };
 
+const createPermission = async (payload) => {
+    const { data, error } = await userApi.createPermission(payload);
+    if (error) {
+        throw new Error(error); // Throw error if there is an error
+    }
+};
+
 
 const updatePermission = async (payload) => {
-    const data = await userApi.updatePermission(payload);
-    if(data) {
-        console.log('data', data);
-    } else if (error) {
-        handleRequestError(error);
+    const {data,error} = await userApi.updatePermission(payload);
+    if (error) {
+        throw new Error(error); // Throw error if there is an error
     }
 };
 
-const createPermission = async (payload) => {
-    const { data , error } = await userApi.createPermission(payload);
-    if(data) {
-        console.log('data', data);
-    } else if (error) {
-        handleRequestError(error);
-    }
-};
 
 const showToast = (severity, summary, detail) => {
     toast.add({ severity, summary, detail, life: 3000 });
@@ -102,7 +108,6 @@ onMounted(() => {
             code: patchForm?.value?.code,
             name: patchForm?.value?.name,
         };
-        console.log('formData', formData)
     }
 
 });

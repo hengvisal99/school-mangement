@@ -10,7 +10,7 @@
                         <h3 class="flex-none">Permissions List</h3>
                     </template>
                     <template #headerButton>
-                        <Button label="Add Permission" @click="addPermission()" class="flex-initial w-44 active:bg-primary-700 
+                        <Button label="Add Permission" @click="handlePermission()" class="flex-initial w-44 active:bg-primary-700 
                                  hover:bg-primary-800 focus:outline-none 
                                  bg-primary border-primary 
                                 " />
@@ -30,6 +30,7 @@ import { useToast } from 'primevue/usetoast';
 import userApi from '@/api/route/users';
 const BaseDataTable = defineAsyncComponent(() => import('@/UI/table/BaseDataTable.vue'));
 const PermissionDialog = defineAsyncComponent(() => import('@/components/content/role-management/dialog/PermissionDialog.vue'));
+const confirmDialog = defineAsyncComponent(() => import('@/UI/dialog/ConfirmDialog.vue'));
 const dialog = useDialog();
 const toast = useToast();
 const permissions = ref();
@@ -46,11 +47,11 @@ const tableColumns = ref([
     // Add more columns as needed
 ]);
 
-const addPermission = (data,isEdit) => {
+const handlePermission = (data,isEdit) => {
     console.log('data',data)
     const dialogRef = dialog.open(PermissionDialog, {
         props: {
-            header: 'Add New Permission',
+            header: isEdit ?'Edit Permission' : 'Add New Permission',
             style: {
                 width: '600px',
                 height: '300px',
@@ -68,7 +69,6 @@ const addPermission = (data,isEdit) => {
         },
         onClose: (options) => {
             const data = options.data;
-            console.log('onclose data', data)
             if (data) {
                 const buttonType = data.buttonType;
                 const summary_and_detail = buttonType === 'Cancel' ? { severity: 'error', summary: 'No Permission Added', detail: `Pressed '${buttonType}' button` } : { severity: 'info', summary: 'Permission Added', detail: data.name };
@@ -81,11 +81,37 @@ const addPermission = (data,isEdit) => {
 }
 const editPermission = (val) => {
     console.log('edit',val)
-    addPermission(val,true)
+    handlePermission(val,true)
 };
 const deletePermission = (val) => {
     console.log('delete',val)
-    addPermission(val)
+    const dialogRef = dialog.open(confirmDialog, {
+        props: {
+            header: 'Delete Permission',
+            style: {
+                width: '565px',
+                height: '252px',
+
+            },
+            breakpoints: {
+                '960px': '75vw',
+                '640px': '90vw'
+            },
+            modal: true
+        },
+        data: {
+            permissions: val,
+        },
+        onClose: (options) => {
+            const data = options.data;
+            if (data) {
+                const buttonType = data.buttonType;
+                const summary_and_detail = buttonType === 'No' ? { severity: 'error', summary: 'No Permission Deleted', detail: `Pressed '${buttonType}' button` } : { severity: 'info', summary: 'Permission Deleted', detail: data.name };
+                toast.add({ ...summary_and_detail, life: 3000 });
+                if (buttonType === 'Yes') getPermission();
+            }
+        },
+    });
 };
 const handleFallback = () => {
     isLoading.value = true; // Reset isLoading to true when fallback is triggered

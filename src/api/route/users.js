@@ -18,6 +18,7 @@ export const userApi = {
     const response = await supabase
       .from('permissions')
       .select('*')
+      .order('created_at', { ascending: true })
     return response
   },
   updatePermission: async (data) => {
@@ -32,6 +33,7 @@ export const userApi = {
     .from('permissions')
     .delete()
     .eq('id', data.id);
+    console.log('req',response)
     return response
   },
 }
