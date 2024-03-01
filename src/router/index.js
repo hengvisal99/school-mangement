@@ -1,6 +1,6 @@
 
 import { createRouter, createWebHistory } from 'vue-router'
-import { supabase } from '../supabase/supabase';
+import supabase from '@/api/supabase';
 import store from "../store/store";
 const routes = [
   {

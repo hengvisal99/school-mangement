@@ -1,5 +1,5 @@
 
-import { supabase } from '../../supabase/supabase';
+import supabase from '@/api/supabase';
 import router from '../../router/index';
 import store from "../store";
 export const actions = {

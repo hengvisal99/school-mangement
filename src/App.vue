@@ -9,7 +9,7 @@
 
 <script setup>
 import { onMounted } from "vue";
-import { supabase } from "./supabase/supabase";
+import supabase from '@/api/supabase';
 import { useStore } from "vuex";
 
 const store = useStore();

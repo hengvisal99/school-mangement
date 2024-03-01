@@ -32,9 +32,9 @@ import { ref, onMounted, defineAsyncComponent } from 'vue';
 import { CustomerService } from '../../../../service/CustomerService';
 import { useDialog } from 'primevue/usedialog';
 import { useToast } from 'primevue/usetoast';
-
+import userApi from '@/api/route/users';
 const BaseDataTable = defineAsyncComponent(() => import('@/UI/table/BaseDataTable.vue'));
-const rolesList = defineAsyncComponent(() => import('@/components/content/role-management/dialog/RoleDialog.vue'));
+const rolesDialog = defineAsyncComponent(() => import('@/components/content/role-management/dialog/RoleDialog.vue'));
 const dialog = useDialog();
 const toast = useToast();
 const roles = ref();
@@ -54,7 +54,7 @@ const tableColumns = ref([
 
 const showRoles = () => {
     console.log('show', dialog)
-    const dialogRef = dialog.open(rolesList, {
+    const dialogRef = dialog.open(rolesDialog, {
         props: {
             header: 'Add New Role',
             style: {
@@ -97,18 +97,22 @@ const handleFallback = () => {
     console.log('Fallback content is being displayed.');
     isLoading.value = true; // Reset isLoading to true when fallback is triggered
 };
+const getRole = async () => {
+    try {
+        const data = await userApi.getRole()
+        console.log('get role',data)
+        // roles.value = data;
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    } finally {
+        isLoading.value = false;
+    }
+}
 onMounted(() => {
     getRoleList();
+    getRole();
 });
 
-const editProduct = (prod) => {
-    // product.value = {...prod};
-    // productDialog.value = true;
-};
-const confirmDeleteProduct = (prod) => {
-    // product.value = prod;
-    // deleteProductDialog.value = true;
-};
 </script>
 
 <style lang="css" scoped></style>

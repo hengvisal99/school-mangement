@@ -66,7 +66,7 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { supabase } from '../../supabase/supabase';
+import supabase from '@/api/supabase';
 
 const props = defineProps({
     navItems: {

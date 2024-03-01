@@ -1,4 +1,4 @@
-import supabase from '@/api';
+import supabase from '@/api/supabase';
 
 export const userApi = {
   getUsers: async () => {
@@ -11,7 +11,8 @@ export const userApi = {
   },
   createPermission: async (data) => {
     const response = await supabase.from('permissions')
-      .insert([data]);
+      .insert([data])
+      .select();
     return response
   },
   getPermission: async () => {
@@ -30,12 +31,38 @@ export const userApi = {
   },
   deletePermission: async (data) => {
     const response = await supabase
-    .from('permissions')
-    .delete()
-    .eq('id', data.id);
-    console.log('req',response)
+      .from('permissions')
+      .delete()
+      .eq('id', data.id);
+    console.log('req', response)
+    return response
+  },
+  createRole: async (data) => {
+    const response = await supabase.from('roles')
+      .insert([{ name: data }])
+      .select()
+
+    return response
+  },
+  getRoleId: async () => {
+    const response = await supabase
+      .from('roles')
+      .select('*')
+      .eq('id', roleId);
+    return response
+  },
+  createRolePermission: async (data) => {
+    const response = await supabase.from('role_permissions')
+      .insert(data)
+      .select();
+    return response
+  },
+  getRole: async () => {
+    const response = await supabase
+    .from('role_permissions')
+    .select('*')
+    
     return response
   },
 }
-
 export default userApi
