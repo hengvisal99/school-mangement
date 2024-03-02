@@ -116,7 +116,11 @@ const actionButtonDialog = async (e) => {
                         .filter(permission => permission.read || permission.write || permission.create || permission.delete)
                         .map(permission => ({
                             role_id: roleId.value,
-                            permission_id: permission.id
+                            permission_id: permission.id,
+                            read : permission.read,
+                            write : permission.write,
+                            create : permission.create,
+                            delete :  permission.delete,
                         }));
 
                     console.log('rolePermissionData', rolePermissionData);

@@ -54,15 +54,33 @@ export const userApi = {
   createRolePermission: async (data) => {
     const response = await supabase.from('role_permissions')
       .insert(data)
-      .select();
+      .select()
+    return response
+  },
+  createRolePermission: async (data) => {
+    const response = await supabase.from('role_permissions')
+      .insert(data)
+      .select(
+        `
+        *,
+        roles:id(id),
+        permissions:id(id)
+      `
+      )
+      .eq('role_id', data.roleId)
+      .eq('permission_id', data.permissionId);
     return response
   },
   getRole: async () => {
     const response = await supabase
-    .from('role_permissions')
-    .select('*')
-    
-    return response
+      .from('role_permissions')
+      .select(`
+        *,
+        permissions(id,name,code,created_at),
+        roles(*)
+      `);
+  
+    return response;
   },
 }
-export default userApi
+export default userApi 

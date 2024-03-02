@@ -46,7 +46,7 @@ const rowsPerPageOptions = [5, 10,25];
 const pageLinkSize = 3;
 const currentPageReportTemplate = "Showing {first} to {last} of {totalRecords} roles";
 const tableColumns = ref([
-    { field: 'id', header: 'ID', sortable: true, style: 'width: 25%' },
+    { field: 'id', header: 'ID', sortable: true, style: 'width: 25%' , },
     { field: 'name', header: 'Name', sortable: true, style: 'width: 25%' },
     { field: 'actions', header: 'Actions', actionColumn: true, style: 'width: 25%' }
     // Add more columns as needed
@@ -98,15 +98,15 @@ const handleFallback = () => {
     isLoading.value = true; // Reset isLoading to true when fallback is triggered
 };
 const getRole = async () => {
-    try {
-        const data = await userApi.getRole()
-        console.log('get role',data)
-        // roles.value = data;
-    } catch (error) {
-        console.error('Error fetching data:', error);
-    } finally {
-        isLoading.value = false;
-    }
+    // try {
+    //     const res = await userApi.getRole()
+    //     console.log('get role',res.data)
+    //     roles.value = res.data;
+    // } catch (error) {
+    //     console.error('Error fetching data:', error);
+    // } finally {
+    //     isLoading.value = false;
+    // }
 }
 onMounted(() => {
     getRoleList();
