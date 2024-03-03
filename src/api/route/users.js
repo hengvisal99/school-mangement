@@ -72,14 +72,9 @@ export const userApi = {
     return response
   },
   getRole: async () => {
-    const response = await supabase
-      .from('role_permissions')
-      .select(`
-        *,
-        permissions(id,name,code,created_at),
-        roles(*)
-      `);
-  
+    let response = await supabase
+      .rpc('get_role_permissions')
+
     return response;
   },
 }

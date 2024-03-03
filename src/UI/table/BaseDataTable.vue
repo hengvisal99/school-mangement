@@ -4,7 +4,7 @@
             filterDisplay="menu" selectionMode="single" dataKey="id" :paginatorTemplate="paginatorTemplate"
             :rowsPerPageOptions="rowsPerPageOptions" :pageLinkSize="pageLinkSize" removableSort
             :currentPageReportTemplate="currentPageReportTemplate" tableStyle="min-width: 50rem">
-            <template #header>
+            <template #header>  
                 <div class="flex flex-wrap justify-between items-center gap-3">
                     <slot name="headerTitle"></slot>
                     <div class="flex flex-row ">
@@ -14,15 +14,19 @@
                     </div>
                 </div>
             </template>
+
             <template v-for="column in columns" :key="column.field">
                 <Column v-if="!column.actionColumn" :field="column.field" :header="column.header"
                     :sortable="column.sortable" :style="column.style">
+                    <template #body="{ index }" v-if="column.field == 'id'">
+                       {{ index + 1 }}
+                    </template>
                 </Column>
                 <Column v-else-if="column.actionColumn" :key="column.field" :header="column.header" :style="column.style">
-                    <template #body="{ data, index}">
+                    <template #body="{ data, index }">
                         <Button icon="pi pi-pencil" outlined rounded class="mr-2 text-primary border-primary-200"
                             @click="editRow(data, index)" />
-                        <Button icon="pi pi-trash" outlined rounded severity="danger" @click="deleteRow(data,index)" />
+                        <Button icon="pi pi-trash" outlined rounded severity="danger" @click="deleteRow(data, index)" />
                     </template>
                 </Column>
             </template>
@@ -34,7 +38,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { FilterMatchMode, FilterOperator } from 'primevue/api';
-
+const currentPage =ref(1)
 const props = defineProps({
     tableData: {
         type: Array,
