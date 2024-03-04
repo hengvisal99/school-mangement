@@ -44,13 +44,6 @@ export const userApi = {
 
     return response
   },
-  getRoleId: async () => {
-    const response = await supabase
-      .from('roles')
-      .select('*')
-      .eq('id', roleId);
-    return response
-  },
   createRolePermission: async (data) => {
     const response = await supabase.from('role_permissions')
       .insert(data)
@@ -58,24 +51,30 @@ export const userApi = {
     return response
   },
   createRolePermission: async (data) => {
+    console.log('data api', data)
     const response = await supabase.from('role_permissions')
       .insert(data)
-      .select(
-        `
-        *,
-        roles:id(id),
-        permissions:id(id)
-      `
-      )
-      .eq('role_id', data.roleId)
-      .eq('permission_id', data.permissionId);
-    return response
+      .select(`
+      *,
+      permissions(id,name,code,created_at),
+      roles(*)
+    `);
+
+    return response;
   },
-  getRole: async () => {
+  getRolePermission: async () => {
     let response = await supabase
       .rpc('get_role_permissions')
 
     return response;
+  },
+  getRolePermissionId: async (id) => {
+    console.log('id', id)
+    const response = await supabase
+      .rpc('get_role_permissions_by_id', {
+        role_id_input: id
+      })
+    return response
   },
 }
 export default userApi 

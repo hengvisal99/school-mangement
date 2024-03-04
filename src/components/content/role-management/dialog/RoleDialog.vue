@@ -24,7 +24,7 @@
                                 </tr>
                                 <tr class="border-b border-gray-200" v-for="(permission, index) in permissionsList"
                                     :key="permission.code">
-                                    <td>{{ permission.name }}</td>
+                                    <td>{{ permission.name || permission.permission_name }}</td>
                                     <td>
                                         <div class="flex justify-end">
                                             <Checkbox v-model="permission.read" :binary="true" :inputId="'read_' + index" />
@@ -82,6 +82,7 @@ const selectAll = ref(false);
 const isLoading = ref(true);
 const payloadData = ref(null);
 const roleId = ref(null);
+const patchForm = ref(null)
 const selectAllPermissions = () => {
     permissionsList.value.forEach(permission => {
         permission.read = selectAll.value;
@@ -163,13 +164,6 @@ const createRolePermission = async (payload) => {
         throw new Error(error); // Throw error if there is an error
     }
 };
-// const updatePermission = async (payload) => {
-//     const {data,error} = await userApi.updatePermission(payload);
-//     if (error) {
-//         throw new Error(error); // Throw error if there is an error
-//     }
-// };
-
 
 const showToast = (severity, summary, detail) => {
     toast.add({ severity, summary, detail, life: 3000 });
@@ -188,7 +182,17 @@ const submitForm = () => {
 const getPermission = async () => {
     const { data, error } = await userApi.getPermission()
     if (data) {
-        permissionsList.value = data;
+        console.log('permissions',data)
+    }
+    else if (error) {
+        console.error('Error get permission:', error);
+    }
+    isLoading.value = false;
+}
+const getRolePermissionId = async (id) => {
+    const { data, error } = await userApi.getRolePermissionId(id)
+    if (data) {
+        permissionsList.value = data.permissions
     }
     else if (error) {
         console.error('Error get permission:', error);
@@ -198,8 +202,18 @@ const getPermission = async () => {
 const handleFallback = () => {
     isLoading.value = true; // Reset isLoading to true when fallback is triggered
 };
-onMounted(() => {
-    getPermission();
+onMounted(async() => {
+    const dialog = dialogRef?.value?.data
+    patchForm.value = dialog.roles?.data
+    isEdit.value =  dialog.isEdit
+    if (isEdit.value) {
+        getRolePermissionId(patchForm.value.role_id)
+       
+    }else{
+        console.log('else')
+        getPermission();
+    }
+
 });
 
 </script>

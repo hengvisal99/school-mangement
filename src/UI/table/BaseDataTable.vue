@@ -18,9 +18,6 @@
             <template v-for="column in columns" :key="column.field">
                 <Column v-if="!column.actionColumn" :field="column.field" :header="column.header"
                     :sortable="column.sortable" :style="column.style">
-                    <template #body="{ index }" v-if="column.field == 'id'">
-                       {{ index + 1 }}
-                    </template>
                 </Column>
                 <Column v-else-if="column.actionColumn" :key="column.field" :header="column.header" :style="column.style">
                     <template #body="{ data, index }">
