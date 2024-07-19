@@ -10,7 +10,7 @@
                         <h3 class="flex-none">Roles List</h3>
                     </template>
                     <template #headerButton>
-                        <Button label="Add Role" @click="showRoles" class="flex-initial w-44 active:bg-primary-700 
+                        <Button label="Add Role" @click="handleRoles" class="flex-initial w-44 active:bg-primary-700 
                                  hover:bg-primary-800 focus:outline-none 
                                  bg-primary border-primary 
                                 " />

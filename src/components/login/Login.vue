@@ -113,6 +113,10 @@ import { computed } from "vue";
 
 const store = useStore();
 const { defineField, errors, handleSubmit } = useForm({
+  initialValues: {
+    username: "visalzxz@gmail.com",
+    password: "visalzxz",
+  },
   validationSchema: yup.object({
     username: yup.string().required(),
     password: yup.string().min(6).required(),

@@ -62,18 +62,33 @@ export const userApi = {
 
     return response;
   },
+  // getRolePermission: async () => {
+  //   let response = await supabase
+  //     .rpc('get_role_permissions')
+
+  //   return response;
+  // },
   getRolePermission: async () => {
     let response = await supabase
-      .rpc('get_role_permissions')
+    .rpc('get_role_permissions_list')
 
     return response;
   },
   getRolePermissionId: async (id) => {
     console.log('id', id)
     const response = await supabase
-      .rpc('get_role_permissions_by_id', {
-        role_id_input: id
+      .rpc('get_role_permissions_id', {
+        role_id_to_find
       })
+    console.log('data',response)
+    return response
+  },
+  getRolePermissionById: async (id) => {
+    console.log('id', id)
+    const response = await supabase
+      .from('role_permissions')
+      .select('*')
+      .eq('id', id)
     return response
   },
 }

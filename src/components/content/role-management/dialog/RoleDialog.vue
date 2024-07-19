@@ -113,6 +113,7 @@ const actionButtonDialog = async (e) => {
             } else {
                 try {
                     await createRole(roleName.value);
+                    console.log('permissionlist',permissionsList.value)
                     const rolePermissionData = permissionsList.value
                         .filter(permission => permission.read || permission.write || permission.create || permission.delete)
                         .map(permission => ({
@@ -146,9 +147,7 @@ const actionButtonDialog = async (e) => {
 const createRole = async (payload) => {
     const {data,error} = await userApi.createRole(payload);
     if (data) {
-        console.log('data role permission', data);
         roleId.value = data[0].id
-        console.log('roleId', roleId);
     }
     else if (error) {
         throw new Error(error); // Throw error if there is an error
@@ -182,7 +181,7 @@ const submitForm = () => {
 const getPermission = async () => {
     const { data, error } = await userApi.getPermission()
     if (data) {
-        console.log('permissions',data)
+        permissionsList.value = data;
     }
     else if (error) {
         console.error('Error get permission:', error);
@@ -190,9 +189,11 @@ const getPermission = async () => {
     isLoading.value = false;
 }
 const getRolePermissionId = async (id) => {
-    const { data, error } = await userApi.getRolePermissionId(id)
+    const { data, error } = await userApi.getRolePermissionById(id)
+    console.log('data',data)
     if (data) {
-        permissionsList.value = data.permissions
+        // permissionsList.value = data.permissions
+        // roleName.value = data.role_name
     }
     else if (error) {
         console.error('Error get permission:', error);
@@ -210,7 +211,6 @@ onMounted(async() => {
         getRolePermissionId(patchForm.value.role_id)
        
     }else{
-        console.log('else')
         getPermission();
     }
 

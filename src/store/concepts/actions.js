@@ -12,7 +12,7 @@ export const actions = {
       commit('setToken', session.access_token);
       commit('setLoginError', error);
 
-      const routeName = store.state.redirectedFrom || "/department";
+      const routeName = store.state.redirectedFrom || "/role-management";
       let expires_at = session.expires_at;
       if (remember_me) {
         const threeDaysInSeconds = 3 * 24 * 60 * 60; // Convert 3 days to seconds

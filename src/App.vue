@@ -19,6 +19,7 @@ const refreshLogin = async () => {
     error,
   } = await supabase.auth.getSession();
   if (session) {
+    console.log('session',session)
     store.dispatch("refreshLogin", session);
   }
 };
